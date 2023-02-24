@@ -1,0 +1,7 @@
+se
+entao
+senao
+
+<S> ::= a<A> | <A> | <A> | o<A> | <A>
+<A> ::= a<A> |
+<A> | i<A> | o<A> | u<A> | ɛ
