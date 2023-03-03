@@ -8,7 +8,7 @@ def eliminarInalcancaveis(afnd):
             return
         
         visitados.add(estado)
-        
+
         for chave in regra.keys():
             if chave == '*':
                 continue
@@ -45,7 +45,7 @@ def eliminarInuteis(afnd):
         return False
 
     aux = list(afnd.keys())
-    
+
     for regra in aux:
         if elimina(afnd[regra], regra):
             uteis.add(regra)

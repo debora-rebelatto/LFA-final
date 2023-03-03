@@ -11,7 +11,7 @@ def eliminarEpsilonTransicoes(afnd):
     def copiarRegras(regras, nRegra):  # Recursivamente copia regras que são acessadas por uma epsilon transição
         if nRegra not in epsilon:
             return  # Caso não tenha epsilon transições na regra
-        
+
         epsilon.remove(nRegra) 
         
         for regra in regras['&']: #percorre os estados que são acessíveis por epsilon transição
