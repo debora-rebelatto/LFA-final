@@ -13,7 +13,7 @@ def eliminarEpsilonTransicoes(afnd):
             return  # Caso não tenha epsilon transições na regra
 
         epsilon.remove(nRegra) 
-        
+
         for regra in regras['&']: #percorre os estados que são acessíveis por epsilon transição
             chaves = afnd[regra].keys() #salva os simbolos dos estados atingidos por epsilon transição
             
@@ -25,7 +25,7 @@ def eliminarEpsilonTransicoes(afnd):
         afnd[nRegra] = unirEstados(afnd, regras['&'] + [nRegra]) 
 
     epAux = epsilon.copy()
-    
+
     for ep in epAux:
         copiarRegras(afnd[ep], ep) #copia as regras dos estados atingidos por epsilon transição, para o estado que tinha epsilon transição
     
@@ -41,7 +41,7 @@ def determinizar(afnd):
         if nReg in visitados: 
             return
         visitados.add(nReg) 
-        chaves = list(regra.keys()) 
+        chaves = list(regra.keys())
 
         for chave in chaves:
             if len(regra[chave]) > 1: #se a regra tiver mais que uma transição

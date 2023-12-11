@@ -3,64 +3,64 @@ from .helpers import *
 def eliminarInalcancaveis(afnd):
     visitados = set()
 
-    def elimina(regra, estado):        # Utiliza uma dfs para remover recursivamente
-        if estado in visitados:
+    def eliminar_alcancaveis(rule, state):
+        if state in visitados:
             return
         
-        visitados.add(estado)
+        visitados.add(state)
 
-        for chave in regra.keys():
-            if chave == '*':
+        for key in rule.keys():
+            if key == '*':
                 continue
-            for i in regra[chave]:
-                elimina(afnd[i], i)
+            for i in rule[key]:
+                eliminar_alcancaveis(afnd[i], i)
 
-    elimina(afnd[0], 0)
-    x = len(afnd)
-
-    for i in range(x):
-        if i not in visitados:      # Após a dfs estados não visitados são eliminados
-            del afnd[i]
-
+    eliminar_alcancaveis(afnd[0], 0)
+    unreachable_states = set(afnd.keys()) - visitados
+    for state in unreachable_states:
+        del afnd[state]
 
 def eliminarInuteis(afnd):
-    visitados = set()
-    uteis = set()
+    visited = set()
+    useful = set()
     
-    for rg in afnd:
-        if '*' in afnd[rg].keys():
-            uteis.add(rg)
+    for rule in afnd:
+        if '*' in afnd[rule].keys():
+            useful.add(rule)
     
-    def elimina(regra, nRegra):     # Utiliza uma dfs para encontrar os estados inuteis
-        if nRegra in uteis:
+    def find_useful(rule, rule_index):
+        if rule_index in useful:
             return True
         
-        visitados.add(nRegra)
+        visited.add(rule_index)
         
-        for chave in regra.keys():
-            for rg in regra[chave]:
-                if rg not in visitados:
-                    if elimina(afnd[rg], rg):
+        for key in rule.keys():
+            for r in rule[key]:
+                if r not in visited:
+                    if find_useful(afnd[r], r):
                         return True
         return False
 
-    aux = list(afnd.keys())
+    all_rules = list(afnd.keys())
 
-    for regra in aux:
-        if elimina(afnd[regra], regra):
-            uteis.add(regra)
-        visitados = set()
+    for rule_index in all_rules:
+        if find_useful(afnd[rule_index], rule_index):
+            useful.add(rule_index)
+        visited = set()
     
-    for regra in aux:
-        if regra not in uteis:      # Após a dfs estados que não estão em uteis são eliminados
-            del afnd[regra]
+    unused_states = set(all_rules) - useful
+    for state in unused_states:
+        del afnd[state]
     
-    for regra in afnd.keys():       # Transições para estados não uteis também são eliminados
-        aux = list(afnd[regra].keys())
-        for chave in aux:
-            if chave == '*':
+    for rule_index in afnd.keys():
+        keys_to_delete = []
+        for key in afnd[rule_index].keys():
+            if key == '*':
                 continue
             
-            for rg in afnd[regra][chave]:
-                if rg not in uteis:
-                    del afnd[regra][chave]
+            afnd[rule_index][key] = [r for r in afnd[rule_index][key] if r in useful]
+            if not afnd[rule_index][key]:
+                keys_to_delete.append(key)
+        
+        for key in keys_to_delete:
+            del afnd[rule_index][key]

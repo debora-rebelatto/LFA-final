@@ -1,61 +1,61 @@
-def unirEstados(automato, estados):
-    # É feita a união de todos os estados do automato que estão na lista estados
-    final = {} #simbolos e os estados acessíveis a partir dele, é atualizado a cada passagem pela função 
-    def unir(estado):
-        for e in estado:
-            if e in final:
-                final[e] = unirListas(final[e], estado[e])
+def merge_states(automaton, states):
+    final_state = {}
+    
+    def merge(state):
+        for s in state:
+            if s in final_state:
+                final_state[s] = merge_lists(final_state[s], state[s])
             else:
-                final.update({e: estado[e]})
+                final_state.update({s: state[s]})
 
-    for estado in estados: # percorre os estados que precisam ser unidos, e adiciona as transições de cada simbolo para o dicionario final
-        unir(automato[estado])
-    return final
-
-
-def unirListas(l1, l2):
-    return l1 + list(set(l2) - set(l1))
+    for state in states:
+        merge(automaton[state])
+    
+    return final_state
 
 
-def unirAutomatos(afd, afndTemp):
-    mapaNovosEstados = {x: x + len(afd) for x in range(len(afndTemp))} # cria um dicionário, com as novas posições na afnd principal das regras do afnd
-    aux = []
+def merge_lists(list1, list2):
+    return list1 + list(set(list2) - set(list1))
 
-    if '&' in afd[0].keys():     # É criado uma nova regra S' que leva a regra S por epsilon transição
-        afd[0]['&'].append(mapaNovosEstados[0])
+
+def merge_automatons(afd, afnd_temp):
+    new_state_mapping = {x: x + len(afd) for x in range(len(afnd_temp))}
+    
+    if '&' in afd[0].keys():
+        afd[0]['&'].append(new_state_mapping[0])
     else:
-        afd[0].update({'&': [mapaNovosEstados[0]]})
+        afd[0].update({'&': [new_state_mapping[0]]})
     
-    for chave in afndTemp.keys(): #percorre os estados do afnd temporario
-        for ch in afndTemp[chave].keys(): #percorre os simbolos/transições dos estados
-            if ch == '*': # se for terminal, continua o loop
+    for key in afnd_temp.keys():
+        for ch in afnd_temp[key].keys():
+            if ch == '*':
                 continue
-            aux = [] #lista auxiliar com os novos estados da afnd temporario
-            for i in afndTemp[chave][ch]: # percorre os estados atingiveis pelo simbolo
-                aux.append(mapaNovosEstados[i]) 
-            afndTemp[chave][ch] = aux #atualiza os estados atingiveis da afnd temporaria, para os novos estados que serão criados na afnd principal
+            new_states = [new_state_mapping[i] for i in afnd_temp[key][ch]]
+            afnd_temp[key][ch] = new_states
     
-    for chave in afndTemp.keys():
-        afd.update({mapaNovosEstados[chave] : afndTemp[chave]}) #cria os novos estados na afnd principal
+    for key in afnd_temp.keys():
+        afd.update({new_state_mapping[key]: afnd_temp[key]})
 
 
-def exibirAutomatoDeterministico(afnd, alfabeto):
-    alfabeto.sort()
-    print('     {}'.format('-----'*len(alfabeto)))
+def display_deterministic_automaton(afnd, alphabet):
+    alphabet.sort()
+    print('     {}'.format('-----' * len(alphabet)))
     print('     |', end='')
-    for i in alfabeto:
+    for i in alphabet:
         print('  {:2}|'.format(i), end='')
-    print('\n     {}'.format('-----'*len(alfabeto)))
+    print('\n     {}'.format('-----' * len(alphabet)))
+    
     for i in afnd.keys():
         if '*' in afnd[i].keys():
             print('*', end='')
         else:
             print(' ', end='')
         print('{:3}:|'.format(i), end='')
-        for j in alfabeto:
+        
+        for j in alphabet:
             if j in afnd[i].keys():
                 print(' {:2} |'.format(afnd[i][j][0]), end='')
             else:
                 print(' {:2} |'.format('-'), end='')
         print('')
-    print('     {}'.format('-----'*len(alfabeto)))
+    print('     {}'.format('-----' * len(alphabet)))
