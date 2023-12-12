@@ -1,14 +1,27 @@
 # Construção de aplicação para gerar Automato Finito Determinístico.
 
-# Descrição do PROJETO:
+## ⚙️ Setup
 
-## UNIVERSIDADE FEDERAL DA FRONTEIRA SUL
+Primeiro, instale o Python:
 
-## CIÊNCIA DA COMPUTAÇÃO - Campus Chapecó CCR: Linguagens Formais e Autômatos
+```bash
+sudo apt-get update
+sudo apt-get install python3.6
+```
 
-Data limite de apresentação regular: até a penúltima semana letiva de aula.
+Caso tenha sido instalado corretamente, rode o seguinte comando para verificar qual versão foi instalada:
 
-Na última semana é permitida a apresentação, com correções, para recuperação de rendimento.
+```bash
+python3 --version
+```
+
+Para inicializar a aplicação, rode o seguinte comando na raíz do projeto:
+
+```bash
+python3 main.py
+```
+
+## Descrição
 
 Objetivo:
 
