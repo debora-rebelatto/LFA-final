@@ -7,7 +7,7 @@ def process_input_file(file_path):
     with open(file_path, "r") as entrada:
         entrada_string = entrada.read()
         entrada_lista = entrada_string.split('\n')
-    
+
     afd = {}
     alfabeto = []
     gramatica = []
@@ -37,15 +37,15 @@ def process_input_file(file_path):
     determinizar(afd)
     
     print('Automato finito deterministico:')
-    exibirAutomatoDeterministico(afd, alfabeto)
+    display_deterministic_automaton(afd, alfabeto)
     
     eliminarInalcancaveis(afd)
     print('\n Após eliminar inalcançáveis:')
-    exibirAutomatoDeterministico(afd, alfabeto)
-    
+    display_deterministic_automaton(afd, alfabeto)
+
     eliminarInuteis(afd)
     print('\n Após eliminar inúteis:')
-    exibirAutomatoDeterministico(afd, alfabeto)
+    display_deterministic_automaton(afd, alfabeto)
 
 input_file_path = "entrada.txt"
 process_input_file(input_file_path)

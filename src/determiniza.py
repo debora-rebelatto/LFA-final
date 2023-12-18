@@ -22,7 +22,7 @@ def eliminarEpsilonTransicoes(afnd):
                 regras['&'] = unirListas(regras['&'], afnd[regra]['&'])
         
         # une as transições de cada simbolo dos estados atingidos por epsilon transição, com as regras do estado que tem epsilon transição
-        afnd[nRegra] = unirEstados(afnd, regras['&'] + [nRegra]) 
+        afnd[nRegra] = merge_states(afnd, regras['&'] + [nRegra])
 
     epAux = epsilon.copy()
 
@@ -51,7 +51,7 @@ def determinizar(afnd):
                 if nRg not in mpRgs.keys(): 
                     nEst = len(afnd)  # Novo estado que será mapeado pela variavel nRg
                     mpRgs.update({nRg: nEst})
-                    afnd.update({len(afnd): unirEstados(afnd, regra[chave])})
+                    afnd.update({len(afnd): merge_states(afnd, regra[chave])})
                     determiniza(afnd[nEst], nEst) # determiniza os novos estados criados
                 
                 regra.update({chave: [mpRgs[nRg]]}) # atualiza a regra que tinha mais que uma transição, para o novo estado criado
